@@ -9,9 +9,7 @@ export class UserRepository{
         return await getConnection().getRepository(User).find();
     }
     
-    async searchOneUserByDrivingEntry(id_driving_entry: number) {
-        return await getConnection().getRepository(User).findOne({where :{drivingEntries:{ id:id_driving_entry} } });
-    }
+  
 
     async searchOneUserWithDrivinEntry(user_id: number) {
         return await getConnection().getRepository(User).createQueryBuilder("user")
@@ -20,12 +18,12 @@ export class UserRepository{
         .getOne();
     }
 
-    async searchOneUserName(name: string) {
-        return await getConnection().getRepository(User).findOne({where :{ name } });
+    async searchOneUserName(username: string) {
+        return await getConnection().getRepository(User).findOne({where :{ username } });
     }
     
-    async searchManyUserName( name: string) {
-        return await getConnection().getRepository(User).find({where :{ name } });
+    async searchManyUserName( username: string) {
+        return await getConnection().getRepository(User).find({where :{ username } });
     }              
     
     async create( car: User) {

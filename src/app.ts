@@ -2,14 +2,15 @@
 import 'reflect-metadata';
 import {createExpressServer, useContainer, useExpressServer} from "routing-controllers";
 import {Container} from "typedi";
-import {CarConntroller} from './controllers/CarConntroller'
+import { json } from 'body-parser';
+import { GlobalErrorHandler } from './middleware/error-handler';
+
 import {UserConntroller} from './controllers/UserController'
-import {DrivingEntryConntroller} from './controllers/DrivingEntryController'
 import { createConnection } from 'typeorm';
 import {getConnection} from "typeorm";
 import { typeOrmConfig } from './config';
 import User from './models/User';
-import Car from './models/Car';
+import { AuthController } from './controllers/AuthController';
 
 /**
  * Start the express app.
@@ -23,16 +24,16 @@ console.log("Server is up and running at port 3000");
         // const conn = await myDataSource.initialize()   
         const conn = await createConnection(typeOrmConfig);
         //mock data
-        let rep = await conn.getRepository(User);
-        let album2 = new User();
-        album2.name = "Me";
-        album2.date = "12.01.2002";
-        album2 = await rep.save(album2);
-        let rep1 = await conn.getRepository(Car);
-        let album1 = new Car();
-        album1.brend = "Meqqqqq";
-        album1.owner_id = 1;
-        album1 = await rep1.save(album1);
+        // let rep = await conn.getRepository(User);
+        // let album2 = new User();
+        // album2.name = "Me";
+        // album2.date = "12.01.2002";
+        // album2 = await rep.save(album2);
+        // let rep1 = await conn.getRepository(Car);
+        // let album1 = new Car();
+        // album1.brend = "Meqqqqq";
+        // album1.owner_id = 1;
+        // album1 = await rep1.save(album1);
         console.log('PG connected. App is ready to do work.');
         /**
          * Setup routing-controllers to use typedi container.
@@ -49,10 +50,11 @@ console.log("Server is up and running at port 3000");
              * Here we specify what controllers should be registered in our express server.
              */
             controllers: [
-                CarConntroller,
                 UserConntroller,
-                DrivingEntryConntroller,
-            ]
+                AuthController
+            ],
+            middlewares: [GlobalErrorHandler, json],
+
         });
 
         

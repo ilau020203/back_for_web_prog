@@ -2,7 +2,7 @@ import {JsonController, Get, Post , Param, Delete, Body,Put} from "routing-contr
 import {Service} from "typedi";
 import User from "../models/User";
 import {DeleteResult, getConnection} from "typeorm";
-import { UserRepository } from "../repository/UserRepository";
+import { UserRepository } from "../services/User";
 
 @Service()
 @JsonController()

@@ -2,8 +2,7 @@ import {
     PostgresConnectionOptions
 } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 import User from './models/User'
-import Car from './models/Car'
-import DrivingEntry from './models/DrivingEntry'
+
 
 const typeOrmConfig: PostgresConnectionOptions = {
 
@@ -19,8 +18,7 @@ const typeOrmConfig: PostgresConnectionOptions = {
    
     entities: [
         User,
-        Car,
-        DrivingEntry
+      
     ],
   
 };

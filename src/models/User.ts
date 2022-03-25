@@ -1,23 +1,52 @@
+import { IsDefined, MinLength } from 'class-validator';
 import {
     Column,
+    CreateDateColumn,
     Entity,
-    OneToMany,
-    PrimaryGeneratedColumn    
+    OneToOne,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,  
 } from 'typeorm';
-import DrivingEntry from './DrivingEntry';
 
+import { RoleType } from '../common/enums';
 
 @Entity()
 export default class User {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
-    name: string;
+    @Column({
+    nullable: true,
+    })
+    refreshToken?: string;
 
-    @Column({ type: 'date' })
-    date: string;
+    @Column()
+    @MinLength(32)
+    @IsDefined()
+    passwordHash!: string;
+
+    @Column({
+    length: 255,
+    })
+    @MinLength(4)
+    email!: string;
+
+    @Column({
+    length: 80,
+    })
+    @IsDefined()
+    username!: string;
+
+    @Column({
+    default: RoleType.CANDIDATE,
+    })
+    roleId!: RoleType;
+
+    @CreateDateColumn({ type: 'timestamptz' })
+    public createdAt!: Date;
+
+    @UpdateDateColumn({ type: 'timestamptz' })
+    public updatedAt!: Date;
+
     
-    @OneToMany(() => DrivingEntry, drivingEntry => drivingEntry.user)
-    drivingEntries: DrivingEntry[];
 }
