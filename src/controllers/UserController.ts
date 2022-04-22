@@ -1,4 +1,4 @@
-import {JsonController, Get, Post , Param, Delete, Body,Put} from "routing-controllers";
+import {JsonController, Get, Post , Param, Delete, Body,Put, Authorized} from "routing-controllers";
 import {Service} from "typedi";
 import User from "../models/User";
 import {DeleteResult, getConnection} from "typeorm";
@@ -10,6 +10,7 @@ export class UserConntroller {
     constructor(private userRepository: UserRepository) {
     }
     @Get("/user")
+    @Authorized()
     async all(): Promise<User[]> {
         return await this.userRepository.findAll();
     }

@@ -1,16 +1,20 @@
 // Must be at top
 import 'reflect-metadata';
-import {createExpressServer, useContainer, useExpressServer} from "routing-controllers";
+import {createExpressServer, useContainer, useExpressServer ,RoutingControllersOptions} from "routing-controllers";
 import {Container} from "typedi";
 import { json } from 'body-parser';
 import { GlobalErrorHandler } from './middleware/error-handler';
+import  { Application } from 'express';
+import path from 'path';
 
 import {UserConntroller} from './controllers/UserController'
 import { createConnection } from 'typeorm';
 import {getConnection} from "typeorm";
 import { typeOrmConfig } from './config';
 import User from './models/User';
+import { getLogger } from 'log4js';
 import { AuthController } from './controllers/AuthController';
+import { authorizationChecker, currentUserChecker } from "./services/auth";
 
 /**
  * Start the express app.
@@ -44,22 +48,24 @@ console.log("Server is up and running at port 3000");
          * We create a new express server instance.
          * We could have also use useExpressServer here to attach controllers to an existing express instance.
          */
-        const expressApp = createExpressServer({
-            /**
-             * We can add options about how routing-controllers should configure itself.
-             * Here we specify what controllers should be registered in our express server.
-             */
+
+        const options: RoutingControllersOptions = {
+            
+            
             controllers: [
-                UserConntroller,
-                AuthController
+                path.join(__dirname + '/controllers/*.ts'), // dev
+                path.join(__dirname + '/controllers/*.js'), // build
             ],
             middlewares: [GlobalErrorHandler, json],
-
-        });
-
+            defaultErrorHandler: false,
+            authorizationChecker:authorizationChecker,
+            currentUserChecker:currentUserChecker,
+        };
+        
+        const expressApp = createExpressServer(options) as Application;
         
 
-        expressApp.listen(3000);
+        expressApp.listen(5000);
         // await conn.close();
         console.log('PG connection closed.');
     } catch (error) {

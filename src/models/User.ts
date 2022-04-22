@@ -13,7 +13,7 @@ import { RoleType } from '../common/enums';
 @Entity()
 export default class User {
     @PrimaryGeneratedColumn()
-    id: number;
+    id!: number;
 
     @Column({
     nullable: true,

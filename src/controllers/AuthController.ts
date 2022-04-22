@@ -88,12 +88,6 @@ import {
     }
   
    
-    // @Post('/as-user/:userId')
-    // @Authorized([RoleType.ADMIN])
-    // async loginAs(@Param('userId') userId: number, @CurrentUser() user: User) {
-    //   return {
-    //     result: await loginAsOtherUser(userId, user),
-    //   };
-    // }
+
   }
   

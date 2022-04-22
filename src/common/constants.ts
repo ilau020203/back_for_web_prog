@@ -1,9 +1,11 @@
 import { resolve } from 'path';
+import * as dotenv from 'dotenv';
+
 import { diskStorage, Options as MulterOptions } from 'multer';
 import { existsSync, mkdir } from 'fs';
 
 
-
+dotenv.config();
 export const SCHEDULER_TICK_PERIOD = 2 * 1000;
 
 export const TOKEN_LIFESPAN = process.env.NODE_ENV === 'dev' ? 9999999 : 15 * 60; // in secs

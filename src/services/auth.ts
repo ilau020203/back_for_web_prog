@@ -7,8 +7,8 @@ import { RoleType } from '../common/enums';
 import { DataStoredInJWT, TokenData } from '../common/types';
 import { REFRESH_TOKEN_LIFESPAN, TOKEN_LIFESPAN } from '../common/constants';
 import { getLogger } from 'log4js';
-import { AuthorizationChecker } from 'routing-controllers/AuthorizationChecker';
-import { CurrentUserChecker } from 'routing-controllers/CurrentUserChecker';
+import { AuthorizationChecker } from 'routing-controllers/types/AuthorizationChecker';
+import { CurrentUserChecker } from 'routing-controllers/types/CurrentUserChecker';
 
 
 import { DeepPartial, getRepository } from 'typeorm';
@@ -32,7 +32,7 @@ export const signUp = async ({
   const userRep = getRepository(User);
 
 
-  const user = await userRep.findOne({
+  let user = await userRep.findOne({
     where: [{ email }],
   });
 
@@ -40,8 +40,15 @@ export const signUp = async ({
     throw new HttpError(422, 'auth.duplicate-email');
   }
 
+   user = await userRep.findOne({
+    where: [{ username }],
+  });
+
+  if (user) {
+    throw new HttpError(422, 'auth.duplicate-username');
+  }
   
-  
+  const roleId = RoleType.ADMIN;
 
   const passwordHash = await bcrypt.hash(password, 10);
 
@@ -49,6 +56,7 @@ export const signUp = async ({
     username,
     email,
     passwordHash,
+    roleId
   });
 
   
@@ -81,6 +89,7 @@ export const login = async ({ email, password }: AuthorizationParams) => {
     throw new UnauthorizedError('auth.invalid');
   }
 
+  
 
 
   const isMatched = await bcrypt.compare(password, user.passwordHash);
@@ -102,9 +111,7 @@ export interface RefreshTokenParams {
   refreshToken: string;
 }
 
-export interface RefreshTokenParams {
-  refreshToken: string;
-}
+
 
 export const refreshUserToken = async ({ refreshToken }: RefreshTokenParams) => {
   if (isTokenExpired(refreshToken)) {
@@ -150,8 +157,8 @@ export const getSecrets = () => {
     );
 
   return {
-    accessSecret: process.env.JWT_SECRET || '',
-    refreshSecret: process.env.JWT_REFRESH_SECRET || '',
+    accessSecret: process.env.JWT_SECRET || 'asdf',
+    refreshSecret: process.env.JWT_REFRESH_SECRET || 'fsda',
   };
 };
 
@@ -189,8 +196,9 @@ export const authorizationChecker: AuthorizationChecker = async (
   action: Action,
   roles: RoleType[]
 ) => {
-  const header = action.request.headers['authorization'];
 
+    const header = action.request.headers['authorization'];
+   
   if (!header) {
     throw new HttpError(422, 'Authorization header is required');
   }
@@ -211,6 +219,8 @@ export const authorizationChecker: AuthorizationChecker = async (
   } catch (e) {}
 
   return false;
+
+  
 };
 
 export const currentUserChecker: CurrentUserChecker = async (action: Action) => {

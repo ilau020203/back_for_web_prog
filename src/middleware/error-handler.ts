@@ -6,7 +6,10 @@ const logger = getLogger();
 @Middleware({ type: 'after' })
 export class GlobalErrorHandler implements ExpressErrorMiddlewareInterface {
   error(error: any, req: Request, res: Response, next: () => any) {
+    console.log(error)
+
     if (!error.httpCode) {
+
       logger.warn('Error:', req.method, req.path, error);
     }
 
@@ -17,5 +20,6 @@ export class GlobalErrorHandler implements ExpressErrorMiddlewareInterface {
     });
 
     next();
+    
   }
 }

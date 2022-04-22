@@ -1,6 +1,7 @@
 import {Service} from "typedi";
 import User from "../models/User";
 import {DeleteResult, getConnection} from "typeorm";
+import { Action, HttpError, UnauthorizedError } from 'routing-controllers';
 
 @Service()
 export class UserRepository{

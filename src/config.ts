@@ -12,7 +12,7 @@ const typeOrmConfig: PostgresConnectionOptions = {
     username: "ilau",
     
     password: "ilau020203",
-    database: "voenca",
+    database: "project_student",
     synchronize: true,
     logging: false,
    
