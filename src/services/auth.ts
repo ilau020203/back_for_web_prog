@@ -102,8 +102,8 @@ export const login = async ({ email, password }: AuthorizationParams) => {
 
   user.refreshToken = token.refreshToken;
   await userRep.save(user);
-
-  return token;
+  const id = user.id;
+  return {token,id  };
 };
 
 
@@ -244,7 +244,13 @@ export const currentUserChecker: CurrentUserChecker = async (action: Action) => 
     const verificationResponse = jwt.verify(token, accessSecret) as DataStoredInJWT;
     const id = verificationResponse.id;
 
-    return userRep.findOne({where:{id:Number.parseInt(id)}});
+    return userRep.findOne(id, {
+      relations: [
+        'posts'
+
+      ],
+    });
+
   } catch (e) {
     return undefined;
   }

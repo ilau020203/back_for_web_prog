@@ -2,7 +2,7 @@ import {JsonController, Get, Post , Param, Delete, Body,Put, Authorized} from "r
 import {Service} from "typedi";
 import User from "../models/User";
 import {DeleteResult, getConnection} from "typeorm";
-import { UserRepository } from "../services/User";
+import { UserRepository } from "../services/user";
 
 @Service()
 @JsonController()
@@ -15,15 +15,9 @@ export class UserConntroller {
         return await this.userRepository.findAll();
     }
     
-    @Get("/user/drivingEntry/:id")
-    async searchDrivingEntriesByCarId(@Param("id")id : number) {
-        return await this.userRepository.searchOneUserWithDrivinEntry(id);
-    }
+   
 
-    @Get("/user/:name")
-    async searchOneModelName(@Param("name") name: string) {
-        return await this.userRepository.searchOneUserName(name);
-    }
+    
                    
     @Post("/user")
     async post(@Body() user: User) {

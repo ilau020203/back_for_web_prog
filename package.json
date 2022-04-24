@@ -23,7 +23,7 @@
     "reflect-metadata": "0.1.10",
     "routing-controllers": "0.9.0",
     "typedi": "0.5.2",
-    "typeorm": "^0.3.0",
+    "typeorm": "^0.2.41",
     "tsconfig-paths": "^3.14.1",
     "tscpaths": "^0.0.9"
   },

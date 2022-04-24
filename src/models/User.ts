@@ -3,12 +3,15 @@ import {
     Column,
     CreateDateColumn,
     Entity,
-    OneToOne,
+    OneToMany,
+    ManyToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn,  
+    JoinTable
 } from 'typeorm';
 
 import { RoleType } from '../common/enums';
+import Post from './Post';
 
 @Entity()
 export default class User {
@@ -48,5 +51,14 @@ export default class User {
     @UpdateDateColumn({ type: 'timestamptz' })
     public updatedAt!: Date;
 
+    @OneToMany(() => Post, post => post.author, {
+        onDelete: 'CASCADE',
+        nullable: true,
+      })
+    posts?: Post[];
+
+    @ManyToMany(() => Post)
+    @JoinTable({ name: 'likes' })
+    likes?: Post[]; 
     
 }

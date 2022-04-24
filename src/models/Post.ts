@@ -1,52 +1,51 @@
-// import { IsDefined, MinLength } from 'class-validator';
-// import {
-//     Column,
-//     CreateDateColumn,
-//     Entity,
-//     OneToOne,
-//     PrimaryGeneratedColumn,
-//     UpdateDateColumn,  
-// } from 'typeorm';
+import { IsDefined, MinLength } from 'class-validator';
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    JoinTable,
+    ManyToOne,
+    ManyToMany,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,  
+} from 'typeorm';
 
-// import { RoleType } from '../common/enums';
+import { RoleType } from '../common/enums';
+import User from './User';
 
-// @Entity()
-// export default class Post {
-//     @PrimaryGeneratedColumn()
-//     id: number;
+@Entity()
+export default class Post {
+    @PrimaryGeneratedColumn()
+    id!: number;
 
-//     @Column({
-//     nullable: true,
-//     })
-//     refreshToken?: string;
+    @ManyToOne(() => User, user => user.posts, {
+    onDelete: "CASCADE",
+    })
+    author!: User;
 
-//     @Column()
-//     @MinLength(32)
-//     @IsDefined()
-//     passwordHash!: string;
+    @ManyToMany(() => User)
+    @JoinTable({ name: 'likes' })
+    likes?: User[]|null; 
+    
+    @Column({
+    length: 80,
+    })
+    @IsDefined()
+    title!: string;
 
-//     @Column({
-//     length: 255,
-//     })
-//     @MinLength(4)
-//     email!: string;
 
-//     @Column({
-//     length: 80,
-//     })
-//     @IsDefined()
-//     username!: string;
+    @Column({
+        type: 'text',
+    })
+    @IsDefined()
+    text?: string;
 
-//     @Column({
-//     default: RoleType.CANDIDATE,
-//     })
-//     roleId!: RoleType;
 
-//     @CreateDateColumn({ type: 'timestamptz' })
-//     public createdAt!: Date;
+    @CreateDateColumn({ type: 'timestamptz' })
+    public createdAt!: Date;
 
-//     @UpdateDateColumn({ type: 'timestamptz' })
-//     public updatedAt!: Date;
+    @UpdateDateColumn({ type: 'timestamptz' })
+    public updatedAt!: Date;
 
     
-// }
+}
