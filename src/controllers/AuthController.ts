@@ -51,6 +51,7 @@ import {
   export class AuthController {
     @Post('/registration')
     async registration(@Body() registrationData: RegistrationData) {
+      console.log("asdf")
       const res = await signUp(registrationData);
       const json = res as Partial<User>;
       delete json.passwordHash;

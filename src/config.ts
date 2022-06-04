@@ -8,7 +8,7 @@ import Post from './models/Post'
 const typeOrmConfig: PostgresConnectionOptions = {
 
     type: "postgres",
-    host: "localhost",
+    host: "postgres",
     port: 5432,
     username: "ilau",
     
